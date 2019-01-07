@@ -1,0 +1,522 @@
+<style type="text/css" id="driver-css">
+
+    .vticker {
+        width: 400px;
+    }
+
+    .vticker ul {
+        padding: 0;
+    }
+
+    .vticker li {
+        list-style: none;
+        border-bottom: 1px solid black;
+        padding: 10px;
+    }
+
+    .dataTables_filter.input {
+        margin-bottom: 20px;
+        margin-right: 10px;
+    }
+
+    .dt-buttons {
+        margin-left: 10px;
+        margin-top: -1px;
+        float: right;
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    .side.menu.profile {
+        background-color: #b0a0dd;
+        width: 230px;
+        height: 100vh;
+        padding: 10px 0px 0px 0px;
+        position: fixed;
+        z-index: 9998;
+        left: 0;
+        -webkit-transition: all 0.5s;
+        -moz-transition: all 0.5s;
+        -o-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+
+    .side.menu.profile .ui.vertical.menu {
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+        max-height: 320px;
+        overflow-y: scroll;
+    }
+
+    .side.menu.profile .ui.vertical.menu .item {
+        background-color: #b0a0dd;
+        color: rgba(255, 255, 255, 0.7);
+        border-radius: 0;
+    }
+
+    #content #background-profile {
+        background-image: url(/driver/blur.jpg);
+        border: none;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>
+
+<script type="text/x-handlebars-template" id="driver-main">
+    <div class="ui top attached demo menu" style="height:50px;">
+        <a class="item menu-item" style="width:120px;">
+            <i class="sidebar icon" style="margin-right:15px;"></i>
+            <span>Menu</span>
+        </a>
+        <div class="right menu">
+            <a class="ui item refresh" data-type="refresh-data">
+                <i class="green refresh large icon"></i>
+            </a>
+            <a class="ui item notification tooltip-notify" data-type="notification"></a>
+            <div class="ui right dropdown item" style="margin-right:15px !important;">
+                Divya
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item profile" data-type="get-profile">Profile</a>
+                    <a class="item logout" href="/">LogOut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached segment pushable" style="height:1000px;">
+        <div class="ui inverted labeled icon left inline vertical sidebar menu">
+            <a class="item home menu-item" data-type="driver-home">
+                <i class="home icon"></i>
+                Home
+            </a>
+            <a class="item current menu-item" data-type="current-ride">
+                <i class="taxi icon"></i>
+                Current Rides
+            </a>
+            <a class="item history menu-item" data-type="driver-history">
+                <i class="history icon"></i>
+                History Data
+            </a>
+        </div>
+        <div class="pusher">
+            <div class="ui basic segment right-div"></div>
+        </div>
+    </div>
+</script>
+
+<script id="notification-number-script" type="text/x-handlebars-template">
+    {{#if newNotificationsLength}}
+        <i class="large icons">
+            <i class="blue alarm icon"></i>
+            <div class="floating ui red circular mini label">{{newNotificationsLength}}</div>
+        </i>
+    {{else}}
+        <i class="blue alarm large icon popup-icon" data-content="No New Notification" data-variation="tiny"
+           data-position="bottom right"></i>
+    {{/if}}
+</script>
+
+<script id="driver-profile-script-id" type="text/x-handlebars-template">
+    <div class="ui right aligned grid">
+        <div class="row">
+            <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+                <div class="ui fluid container">
+                    <div class="ui two column grid">
+                        <div class="side menu profile" id="sideMenu">
+                            <div align="center" class="profile">
+                                <br>
+                                <a href=""><img src="/driver/driver.jpg" alt="Marry Doe" class="ui circular image"
+                                                width="150px"></a>
+                                <div class="ui white header">Marry Doe</div>
+                                <div class="ui divider"></div>
+                            </div>
+                            <div class="ui fluid vertical left aligned menu" id="verticalMenu" tabindex="0"
+                                 style="overflow: hidden; outline: none;">
+                                <a class="item"><span>Name: Marry Doe</span></a>
+                                <a class="item"><span>Email: abc@sprinklr.com</span></a>
+                                <a class="item"><span>Address: My Home Address</span></a>
+                                <a class="item"><span>Contact: 9067452341</span></a>
+                                <a class="item"><span>Cab No: KA 01 3456</span></a>
+                                <a class="item"><span>Company: Sprinklr<br/>
+                                <button class="ui black basic button" style="margin-top:10px;">Edit</button></span></a>
+                            </div>
+                            <div id="ascrail2000" class="nicescroll-rails nicescroll-rails-vr"
+                                 style="width: 8px; z-index: 9998; cursor: default; position: absolute; top: 257.438px; left: 222px; height: 320px; display: block; opacity: 0;">
+                                <div class="nicescroll-cursors"
+                                     style="position: relative; top: 0px; float: right; width: 6px; height: 284px; background-color: transparent; border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div>
+                            </div>
+                            <div id="ascrail2000-hr" class="nicescroll-rails nicescroll-rails-hr"
+                                 style="height: 8px; z-index: 9998; top: 569.438px; left: 0px; position: absolute; cursor: default; display: none; width: 222px; opacity: 0;">
+                                <div class="nicescroll-cursors"
+                                     style="position: absolute; top: 0px; height: 6px; width: 230px; background-color: transparent; border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div>
+                            </div>
+                        </div>
+                        <div class="sixteen wide column" id="content">
+                            <div class="ui segment" id="background-profile">
+                                <div class="ui circular left floated segment">
+                                    <img src="/driver/driver.jpg" alt="Marry Doe" class="ui circular image"
+                                         width="150px">
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="ui horizontal divider">My Profile</div>
+                            <br/>
+                            <div class="ui divider"></div>
+                            <br/>
+                            <div align="center">
+                                bchjevfcjwhjfvjhrbverhvkrehvkbhjgjgdbvjgbhjjdgbvjvdgkjhvbjdhbvjgb<br/>
+                                vfhewvhjfdvfhjvgwjacbhbsxjkSNXKAHDSCGSFDVHFDVCHABJDCJADSHCJGFDVFN
+                            </div>
+                            <br/><br/>
+                            <div class="ui equal width form" style="margin-left:200px;">
+                                <div class="fields">
+                                    <div class="field">
+                                        <label>Username</label>
+                                        <input type="text" placeholder="Username">
+                                    </div>
+                                    <div class="field">
+                                        <label>Password</label>
+                                        <input type="password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="fields">
+                                    <div class="field">
+                                        <label>First name</label>
+                                        <input type="text" placeholder="First Name">
+                                    </div>
+                                    <div class="field">
+                                        <label>Middle name</label>
+                                        <input type="text" placeholder="Middle Name">
+                                    </div>
+                                    <div class="field">
+                                        <label>Last name</label>
+                                        <input type="text" placeholder="Last Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="ui negative right floated basic button">Cancel</button>
+                            <button class="ui positive right floated basic button">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right floated column events-div" style="height:1500px; margin-right:150px"></div>
+        </div>
+    </div>
+</script>
+
+<script id="driver-current-rides-script-id" type="text/x-handlebars-template">
+    <div class="ui right aligned grid">
+        <div class="row">
+            <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+                {{#any data}}
+                    <div class="ui driver-buttons">
+                        {{#if started}}
+                            <h4>Started Ride {{dateFormatTimeAgo startTime}}</h4>
+                        {{else}}
+                            <button class="ui green left floated basic {{#if startNow}}{{else}} disabled {{/if}}button start-ride-button"
+                                    data-type="start-ride">Start My Ride
+                            </button>
+                        {{/if}}
+                        {{#if notified}}<h4>Notified Users {{dateFormatTimeAgo notifiedTime}}</h4>
+                        {{else}}
+                            <button class="ui blue left floated basic {{#if notifyNow}}{{else}} disabled {{/if}}button notify-ride-button"
+                                    style="margin-left: 10px;" data-type="notify-users">Notify Users
+                            </button>
+                        {{/if}}
+                    </div>
+                    <div class="rides-table" style="margin-bottom:30px;margin-top:50px;">
+                        <table class="ui single line small table striped" id="driver-current-rides-tbl" cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th class='center aligned field'>User ID</th>
+                                <th class='center aligned field'>User</th>
+                                <th class='center aligned field'>Location</th>
+                                <th class='center aligned field'>Phone Number</th>
+                                <th class='center aligned field'>Batch</th>
+                                <th class='center aligned field'>Team</th>
+                                <th class='center aligned last'></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each data}}
+                                <tr class="tr-body tr-field" data-ride="{{rideId}}" data-employee="{{employeeId}}">
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeId}}">{{employeeId}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeName}}">{{employeeName}}</td>
+                                    <td class='center aligned td-body field' title="{{address}}">{{address}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{phoneNumber}}">{{phoneNumber}}</td>
+                                    <td class='center aligned td-body field' title="{{batch}}">{{batch}}</td>
+                                    <td class='center aligned td-body field' title="{{team}}">{{team}}</td>
+                                    <td class='center aligned td-last'>
+                                        <i class="check circle outline icon large olive disabled icon"></i>
+                                        <i class="check circle outline icon large teal disabled icon"></i>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{#if ended}}
+                        <br/>Ride Ended {{dateFormatTimeAgo endedTime}}
+                    {{else}}
+                        <button class="ui black right floated basic {{#if endNow}}{{else}} disabled {{/if}}button end-ride-button"
+                                data-type="end-ride">End My Ride
+                        </button>
+                    {{/if}}
+                {{/any}}
+            </div>
+            <div class="right floated column events-div" style="height:1500px; margin-right:150px"></div>
+        </div>
+    </div>
+</script>
+
+<script id="driver-home-script-id" type="text/x-handlebars-template">
+    <div class="ui center aligned grid">
+        <div class="row">
+            <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+                <div id="home">
+                    <div id="owl-demo" class="owl-carousel owl-theme">
+
+                        <div class="item"><img src="/assets/slider/s1.jpg"></div>
+                        <div class="item"><img src="/assets/slider/s2.jpg"></div>
+                        <div class="item"><img src="/assets/slider/s3.jpg"></div>
+                        <div class="item"><img src="/assets/slider/s4.jpg"></div>
+
+                    </div>
+                </div>
+
+                <br/><br/>
+
+                <div id="about-in-home">
+                    <h1 align="center">About Us</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tortor purus, placerat ut
+                        dignissim a,
+                        luctus ut magna. Nam posuere, purus eget ornare pellentesque, enim dolor sagittis lectus, nec
+                        porttitor
+                        nulla libero id quam. Sed vitae est felis, vitae sodales libero. Sed consectetur adipiscing
+                        elementum.
+                        Suspendisse magna diam, mollis a malesuada ut, rutrum a libero. Donec eget libero elit. Sed non
+                        augue ac
+                        magna porttitor posuere. Integer malesuada lorem sed augue fermentum vitae dictum lorem semper.
+                        Aliquam
+                        aliquam, justo sed placerat fringilla, magna erat placerat orci, a tristique risus ante at urna.
+                        Proin
+                        aliquet enim eget purus auctor eu interdum augue sagittis. Curabitur at dictum diam. Mauris
+                        risus est,
+                        tristique nec lobortis ut, ullamcorper quis nulla.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tortor purus, placerat ut
+                        dignissim a,
+                        luctus ut magna. Nam posuere, purus eget ornare pellentesque, enim dolor sagittis lectus, nec
+                        porttitor
+                        nulla libero id quam. Sed vitae est felis, vitae sodales libero. Sed consectetur adipiscing
+                        elementum.
+                        Suspendisse magna diam, mollis a malesuada ut, rutrum a libero. Donec eget libero elit. Sed non
+                        augue ac
+                        magna porttitor posuere. Integer malesuada lorem sed augue fermentum vitae dictum lorem semper.
+                        Aliquam
+                        aliquam, justo sed placerat fringilla, magna erat placerat orci, a tristique risus ante at urna.
+                        Proin
+                        aliquet enim eget purus auctor eu interdum augue sagittis. Curabitur at dictum diam. Mauris
+                        risus est,
+                        tristique nec lobortis ut, ullamcorper quis nulla.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tortor purus, placerat ut
+                        dignissim a,
+                        luctus ut magna. Nam posuere, purus eget ornare pellentesque, enim dolor sagittis lectus, nec
+                        porttitor
+                        nulla libero id quam. Sed vitae est felis, vitae sodales libero. Sed consectetur adipiscing
+                        elementum.
+                        Suspendisse magna diam, mollis a malesuada ut, rutrum a libero. Donec eget libero elit. Sed non
+                        augue ac
+                        magna porttitor posuere. Integer malesuada lorem sed augue fermentum vitae dictum lorem semper.
+                        Aliquam
+                        aliquam, justo sed placerat fringilla, magna erat placerat orci, a tristique risus ante at urna.
+                        Proin
+                        aliquet enim eget purus auctor eu interdum augue sagittis. Curabitur at dictum diam. Mauris
+                        risus est,
+                        tristique nec lobortis ut, ullamcorper quis nulla.</p>
+                </div>
+            </div>
+            <div class="right floated column events-div" style="height:1500px; margin-right:150px"></div>
+        </div>
+    </div>
+</script>
+
+<script id="empty-response-script" type="text/x-handlebars-template">
+    <div class="ui right aligned grid">
+        <div class="row">
+            <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+                <h3 style="margin-right:350px;">{{msg}}</h3>
+            </div>
+            <div class="right floated column events-div" style="height:1500px; margin-right:150px"></div>
+        </div>
+    </div>
+</script>
+
+<script id="driver-history-script-id" type="text/x-handlebars-template">
+    <div class="ui right aligned grid">
+        <div class="row">
+            <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+                {{#any ongoingRides}}
+                    <h3 align="center">Pending Rides</h3>
+                    <div class="rides-table" style="margin-bottom:30px;margin-top:50px;">
+                        <table class="ui single line small table celled striped" id="driver-history-ongoing-rides-tbl"
+                               cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th class='center aligned field' rowspan="2">Date</th>
+                                <th class='center aligned field' rowspan="2">Batch</th>
+                                <th class='center aligned field' colspan="4">Employee Details</th>
+                            </tr>
+                            <tr>
+                                <th class='center aligned field'>Name</th>
+                                <th class='center aligned field'>Team</th>
+                                <th class='center aligned field'>Location</th>
+                                <th class='center aligned field'>Contact</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each ongoingRides}}
+                                <tr class="tr-body">
+                                    <td class='center aligned td-body field' rowspan='{{employeeDetails.length}}'
+                                        title='{{date}}'>{{date}}</td>
+                                    <td class='center aligned td-body field' title="{{batch}}"
+                                        rowspan='{{employeeDetails.length}}'>{{batch}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].name}}">{{employeeDetails.[0].name}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].team}}">{{employeeDetails.[0].team}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].address}}">{{employeeDetails.[0].address}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].phoneNumber}}">{{employeeDetails.[0].phoneNumber}}</td>
+                                </tr>
+                                {{#withAfter employeeDetails 1}}
+                                    <tr class="tr-body">
+                                        <td class='center aligned td-body field'
+                                            title="{{name}}">{{name}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{team}}">{{team}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{address}}">{{address}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{phoneNumber}}">{{phoneNumber}}</td>
+                                    </tr>
+                                {{/withAfter}}
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                {{/any}}
+                {{#any completedRides}}
+                    <h3 align="center">Completed Rides</h3>
+                    <div class="rides-table" style="margin-bottom:30px;margin-top:50px;">
+                        <table class="ui single line small table celled striped" id="driver-history-completed-rides-tbl"
+                               cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th class='center aligned field' rowspan="2">Date</th>
+                                <th class='center aligned field' rowspan="2">Batch</th>
+                                <th class='center aligned field' colspan="4">Employee Details</th>
+                            </tr>
+                            <tr>
+                                <th class='center aligned field'>Name</th>
+                                <th class='center aligned field'>Team</th>
+                                <th class='center aligned field'>Location</th>
+                                <th class='center aligned field'>Contact</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each completedRides}}
+                                <tr class="tr-body">
+                                    <td class='center aligned td-body field' rowspan='{{employeeDetails.length}}'
+                                        title='{{date}}'>{{date}}</td>
+                                    <td class='center aligned td-body field' title="{{batch}}"
+                                        rowspan='{{employeeDetails.length}}'>{{batch}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].name}}">{{employeeDetails.[0].name}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].team}}">{{employeeDetails.[0].team}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].address}}">{{employeeDetails.[0].address}}</td>
+                                    <td class='center aligned td-body field'
+                                        title="{{employeeDetails.[0].phoneNumber}}">{{employeeDetails.[0].phoneNumber}}</td>
+                                </tr>
+                                {{#withAfter employeeDetails 1}}
+                                    <tr class="tr-body">
+                                        <td class='center aligned td-body field'
+                                            title="{{name}}">{{name}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{team}}">{{team}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{address}}">{{address}}</td>
+                                        <td class='center aligned td-body field'
+                                            title="{{phoneNumber}}">{{phoneNumber}}</td>
+                                    </tr>
+                                {{/withAfter}}
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                {{/any}}
+            </div>
+            <div class="right floated column events-div" style="height:1500px; margin-right:150px"></div>
+        </div>
+    </div>
+</script>
+
+
+<script id="event-notification-script-id" type="text/x-handlebars-template">
+    <div class="vticker">
+        <ul>
+            {{#each notifications}}
+                <li title="{{date}}">
+                    {{#is eventCategory "DRIVER_EVENT"}}
+                        <span>You Acknowledged </span><br/>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{else}}
+                        <span>{{ackowledger}} Acknowledged </span><br>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{/is}}
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
+
+<script id="notification-popup" type="text/x-handlebars-template">
+    <div class="ui tall stacked segment">
+        <div class="ui celled list">
+            {{#each newNotifications}}
+                <div class="item">
+                    {{#is eventCategory "DRIVER_EVENT"}}
+                        <span>You Acknowledged </span><br/>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{else}}
+                        <span>{{ackowledger}} Acknowledged </span><br>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{/is}}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</script>

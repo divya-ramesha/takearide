@@ -1,0 +1,574 @@
+<style type="text/css" id="admin-css">
+    .vticker {
+        width: 400px;
+    }
+
+    .vticker ul {
+        padding: 0;
+    }
+
+    .vticker li {
+        list-style: none;
+        border-bottom: 1px solid black;
+        padding: 10px;
+    }
+</style>
+
+<script type="text/x-handlebars-template" id="admin-main">
+    <div class="ui top attached demo menu">
+        <a class="item menu-item">
+            <i class="sidebar icon"></i>
+            Menu
+        </a>
+        <div class="right menu">
+            <a class="ui item refresh">
+                <i class="refresh icon"></i>
+            </a>
+            <a class="ui item notification tooltip-notify" data-type="notification"></a>
+
+            <div class="ui right dropdown item" style="margin-right:15px !important;">
+                Chethan
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item profile">Profile</a>
+                    <a class="item settings">Settings</a>
+                    <a class="item logout">LogOut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached segment pushable">
+        <div class="ui inverted labeled icon left inline vertical sidebar menu">
+            <a class="item menu-item" id="home" data-type="home">
+                <i class="home icon"></i>
+                Home
+            </a>
+            <a class="item menu-item"  id="user-list" data-type="user-lists">
+                <i class="user icon"></i>
+                Users
+            </a>
+            <a class="item menu-item" id="groups" data-type="group-lists">
+                <i class="group icon"></i>
+                Groups
+            </a>
+            <a class="item menu-item" id="drivers" data-type="get-drivers">
+                <i class="car icon"></i>
+                Drivers
+            </a>
+            <a class="item menu-item" id="drivers" data-type="today-rides">
+                <i class="military icon"></i>
+                Today's rides
+            </a>
+            <a class="item menu-item" id="reschedule" data-type="reschedule-requests">
+                <i class="edit icon"></i>
+                Reschedule requests
+            </a>
+            <a class="item menu-item" id="drivers" data-type="history">
+                <i class="history icon"></i>
+                history
+            </a>
+            <a class="item menu-item" id="drivers" data-type="statistics">
+                <i class="bar chart icon"></i>
+               Statistics
+            </a>
+        </div>
+
+        <div class="pusher" style="height:1000px">
+            <div class="ui basic segment">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+
+                            <div id="create-group">
+
+
+                            </div>
+
+                            <div id="container" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+                        </div>
+                        <div id="events-div" class="right floated column events-div" style="height:1500px;margin-right:250px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+
+
+
+<script type="text/x-handlebars-template" id="create-main">
+    <h3 class="ui header center aligned"><i class="group icon"></i>Create Group</h3>
+    <div class="ui  tiny header">Available Cabs</div>
+    <select id="users" class="ui fluid search dropdown">
+
+        <option value="">select</option>
+{{#each this.drivers}}
+    <option value="{{driverId}}">{{driverId}}  - {{carNumber}}</option>
+{{/each}}
+
+    </select>
+
+    <div class="ui tiny header">Select timings</div>
+
+    <select id="time" class="ui fluid search dropdown">
+        <option value="">select time</option>
+        <option value="09:00 AM">09:00 AM</option>
+        <option value="11:00 AM">11:00 AM </option>
+        <option value="01:00 PM ">01:00 PM</option>
+        <option value="04:00 PM">04:00 PM</option>
+    </select>
+
+    <div class="ui tiny header">Select Type</div>
+
+    <select id="pickOrDrop" class="ui fluid search dropdown">
+        <option value="">select type</option>
+        <option value="PICKUP">pick up</option>
+        <option value="DROP">drop</option>
+    </select>
+
+    <div class="ui tiny header">Users</div>
+    <div class="ui fluid multiple search selection dropdown">
+        <input name="tags" id="names" type="hidden">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="text">Users</div>
+        <div class="menu">
+            {{#each this.users}}
+            <div class="item"  data-value="{{employeeId}}" id="{{name}}">{{name}} -({{employeeId}})</div>
+            {{/each}}
+        </div>
+    </div>
+    <p id="create-button">
+    <div class="ui basic button" id="create" data-type="create-group"><i class="plus icon"></i>Create Group</div>
+    </p>
+
+</script>
+
+
+<script id="event-notification-script-id" type="text/x-handlebars-template">
+    <div class="vticker">
+        <ul>
+            {{#each notifications}}
+                <li title="{{date}}">
+                    <span>{{ackowledger}} Acknowledged </span><br>
+                    <span>{{eventType}}</span><br/>
+                    <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
+
+
+<script id="notification-number-script" type="text/x-handlebars-template">
+    {{#if newNotificationsLength}}
+        <i class="large icons">
+            <i class="blue alarm icon"></i>
+            <div class="floating ui red circular mini label">{{newNotificationsLength}}</div>
+        </i>
+    {{else}}
+        <i class="blue alarm large icon popup-icon" data-content="No New Notification" data-variation="tiny"
+           data-position="bottom right"></i>
+    {{/if}}
+</script>
+
+
+<script type="text/x-handlebars-template" id="groups-template">
+    <div class="ui header center aligned"> <i class="group icon"></i>Groups</div>
+    <table class="ui celled stripped table ">
+        <thead colspan="3">
+        <th>Driver Id</th>
+        <th>EmployeeId 's</th>
+        <th>Ride Type</th>
+        <th>Actions</th>
+        </thead>
+        {{#each this}}
+            <tr>
+                <td>{{driverId}}</td>
+                <td>{{employeeIdList}}</td>
+                <td>{{rideType}}</td>
+                <td class="right aligned collapsing">
+                    <a href="javascript:void(0);" id="{{driverId}}" data-type="remove-group" class="center aligned"><i class="trash red large icon" title="delete"></i></a>
+                    <!a href="javascript:void(0);" id="pop" class="visible content button">
+                        <!i class="write blue large icon" title="edit"><!/i>
+                    <!/a>
+                    <div class="ui flowing popup top left transition hidden">
+                        <div class="ui buttons">
+                            <form class="ui form">
+                                <div class="field">
+                                    <label>New Employee Id's<br/>
+                                        <input type="text" name="EmployeeId"
+                                               style="width:200px;">
+                                    </label>
+                                </div>
+                                <input id="updateGroup" driverId="{{driverId}}" employeeIdList="{{employeeIdList}}" rideType="{{rideType}}" batch="{{batch}}" data-type="update-groups" class="ui primary button" type="button" value="Update Details">
+                            </form>
+                            <span class="message"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {{/each}}
+    </table>
+
+
+</script>
+
+<script type="text/x-handlebars-template" id="show-in-todays-ride">
+
+    <br>
+    <div class="ui tiny header">Available Cabs</div>
+    <select id="users" class="ui fluid search dropdown">
+
+        <option value="">select</option>
+        {{#each this.drivers}}
+            <option value="{{driverId}}">{{driverId}}  - {{carNumber}}</option>
+        {{/each}}
+
+    </select>
+
+    <div class="ui tiny header">Select timings</div>
+
+    <select id="time" class="ui fluid search dropdown">
+        <option value="">select time</option>
+        <option value="09:00 AM">09:00 AM</option>
+        <option value="11:00 AM">11:00 AM </option>
+        <option value="01:00 PM ">01:00 PM</option>
+        <option value="03:30 PM">03:30 PM</option>
+        <option value="04:00 PM">04:00 PM</option>
+    </select>
+
+    <div class="ui tiny header">Select Type</div>
+
+    <select id="pickOrDrop" class="ui fluid search dropdown">
+        <option value="">select type</option>
+        <option value="PICKUP">pick up</option>
+        <option value="DROP">drop</option>
+    </select>
+
+    <div class="ui tiny header">Users</div>
+    <div class="ui fluid multiple search selection dropdown">
+        <input name="tags" id="names" type="hidden">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="text">Users</div>
+        <div class="menu">
+            {{#each this.users}}
+                <div class="item" data-value="{{employeeId}}" id="{{name}}">{{name}} -({{employeeId}})</div>
+            {{/each}}
+        </div>
+    </div>
+    <p id="create-button">
+    <div class="ui basic button" id="create" data-type="add-ride"><i class="plus icon"></i>Create ride</div>
+    </p>
+</script>
+
+
+<script type="text/x-handlebars-template" id="today-rides-template">
+
+    <div class="ui header center aligned"><i class="military icon"></i>Today's Rides</div>
+    <div class="ui basic blue button" data-type="show-create-ride"><i class="add icon"></i>Create Todays ride</div>
+    <div id="add-ride-template">
+
+   </div>
+    <table class="ui celled stripped table ">
+        <thead colspan="7">
+        <th>Driver Id</th>
+        <th>EmployeeId 's</th>
+        <th>Date</th>
+        <th>batch</th>
+        <th>complete</th>
+        <th>Ride Type</th>
+        <th>actions</th>
+        </thead>
+        {{#each this}}
+            <tr>
+                <td>{{driverId}}</td>
+                <td>{{employeeIdList}}</td>
+                <td>{{date}}</td>
+                <td>{{batch}}</td>
+                <td>{{complete}}</td>
+                <td>{{rideType}}</td>
+                <td class="right aligned collapsing">
+                    <a href="javascript:void(0);" id="{{rideId}}" data-type="remove-ride"><i class="trash red large icon" title="delete"></i></a>
+                    <!a href="javascript:void(0);" id="pop" class="visible content button">
+                        <!i class="write blue large icon" title="edit"><!/i>
+                    <!/a>
+                    <div class="ui flowing popup top left transition hidden">
+                        <div class="ui buttons">
+                            <form class="ui form">
+                                <div class="field">
+                                    <label>New Employee Id's<br/>
+                                        <input type="text" name="EmployeeId"
+                                               style="width:200px;">
+                                    </label>
+                                </div>
+                                <input id="updateRide" rideType="{{rideType}}" driverId="{{driverId}}" date="{{date}}" batch="{{batch}}" complete="{{complete}}"  data-type="updateRideInfo" class="ui primary button" type="button" value="Update Details">
+                            </form>
+                            <span class="message"></span>
+                        </div>
+                    </div>
+            </tr>
+        {{/each}}
+    </table>
+</script>
+
+<script type="text/x-handlebars-template" id="reschedule-template">
+    <div class="ui header center aligned"><i class="edit icon"></i>Reschedule Rides</div>
+    <table class="ui celled stripped table ">
+        <thead colspan="7">
+        <th>rideType</th>
+        <th>oldBatch</th>
+        <th>newBatch</th>
+        <th>employeeId</th>
+        <th>acknowledged</th>
+        <th>date</th>
+        <th>acknowledge</th>
+        </thead>
+        {{#each this}}
+        <tr>
+            <td>{{rideType}}</td>
+            <td>{{oldBatch}}</td>
+            <td>{{newBatch}}</td>
+            <td>{{employeeId}}</td>
+            <td>{{acknowledged}}</td>
+            <td>{{date}}</td>
+            <td>
+                <a rideType="{{rideType}}" oldBatch="{{oldBatch}}" newBatch="{{newBatch}}" employeeId="{{employeeId}}" date="{{date}}" href="javascript:void(0);" id="{{employeeId}}" data-type="ack-request"><i class="checkmark large icon" title="right"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</script>
+
+<script type="text/x-handlebars-template" id="history-template">
+    <div class="ui header center aligned"><i class="history icon"></i>History</div>
+    <table class="ui celled stripped table ">
+        <thead colspan="3">
+        <th>Driver Id</th>
+        <th>EmployeeId 's</th>
+        <th>Date</th>
+        <th>batch</th>
+        <th>complete</th>
+        <th>Ride Id</th>
+        </thead>
+        {{#each this}}
+            <tr>
+                <td>{{driverId}}</td>
+                <td>{{employeeIdList}}</td>
+                <td>{{date}}</td>
+                <td>{{batch}}</td>
+                <td>{{complete}}</td>
+                <td>{{rideId}}</td>
+        {{/each}}
+    </table>
+</script>
+
+<script type="text/x-handlebars-template" id="driver-template">
+    <div class="ui header center aligned"><i class="car icon"></i>Drivers</div>
+    <div class="ui buttons">
+        <div class="ui basic blue button">
+            <div class="visible content"><i class="plus icon"></i> Add Driver</div>
+        </div>
+        <div class="ui flowing popup top left transition hidden">
+            <div class="ui buttons">
+                <form class="ui form">
+                    <div class="field">
+                        <label>DriverId<br/>
+                            <input type="text" name="driverId"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Driver Name<br/>
+                            <input type="text" name="driverName"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Driver Phone Number<br/>
+                            <input type="text" name="phoneNumber"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Car Number<br/>
+                            <input type="text" name="carNumber"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <input data-type="add-driver" class="ui primary button" type="button" value="Add Employee">
+                </form>
+                <span class="message"></span>
+            </div>
+        </div>
+    </div>
+
+<table class="ui celled stripped table ">
+    <thead colspan="5">
+    <th>DriverId</th>
+    <th>Name</th>
+    <th>Car Number</th>
+    <th>Phone Number</th>
+    <th>Actions</th>
+    </thead>
+    {{#each this}}
+        <tr>
+            <td>{{driverId}}</td>
+            <td>{{name}}</td>
+            <td>{{carNumber}}</td>
+            <td>{{phoneNumber}}</td>
+            <td class="right aligned collapsing">
+                <a href="javascript:void(0);" id="{{driverId}}" data-type="remove-driver" class="center aligned"><i class="trash red large icon" title="delete"></i></a>
+                <!a href="javascript:void(0);" id="pop" class="visible content button">
+                    <!i class="write blue large icon" title="edit"><!/i>
+                <!/a>
+                <div class="ui flowing popup top left transition hidden">
+                    <div class="ui buttons">
+                        <form class="ui form">
+                            <div class="field">
+                                <label>Driver Name<br/>
+                                    <input type="text" name="drivername"
+                                           style="width:200px;">
+                                </label>
+                                <label>phone Number<br/>
+                                    <input type="text" name="drivernumber"
+                                           style="width:200px;">
+                                </label>
+                                <label>Car Number<br/>
+                                    <input type="text" name="carnumber"
+                                           style="width:200px;">
+                                </label>
+                            </div>
+                            <input id="updateDriver" driverId="{{driverId}}" phoneNumber="{{phoneNumber}}" carNumber="{{carNumber}}" driverName="{{name}}" data-type="update-driver" class="ui primary button" type="button" value="Update Details">
+                        </form>
+                        <span class="message"></span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {{/each}}
+</table>
+</script>
+<script id="entry-template" type="text/x-handlebars-template">
+
+    <div class="ui header center aligned"><i class="user icon"></i>User</div>
+    <div class="ui buttons">
+        <div class="ui basic blue button button-add" >
+            <div class="visible content button" href="javascript:void(0);"> <i class="plus icon"></i> Add Employee</div>
+        </div>
+        <div class="ui flowing popup top left transition hidden">
+            <div class="ui buttons">
+                <form class="ui form">
+                    <div class="field">
+                        <label>Employee Name<br/>
+                            <input type="text" name="name"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Team<br/>
+                            <input type="text" name="team"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Employee Id<br/>
+                            <input type="text" name="employeeId"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Employee Address<br/>
+                            <input type="text" name="address"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>Employee Phone Number<br/>
+                            <input type="text" name="phoneNumber"
+                                   style="width:200px;">
+                        </label>
+                    </div>
+                    <input data-type="add-employee" class="ui primary button" type="button" value="Add Employee">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="ui celled stripped table ">
+        <thead colspan="4">
+        <th>User</th>
+        <th>EmployeeId</th>
+        <th>phoneNumber</th>
+        <th>Actions</th>
+        </thead>
+        {{#each this}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{employeeId}}</td>
+                <td>{{phoneNumber}}</td>
+                <td class="right aligned collapsing">
+                    <a href="javascript:void(0);" id="{{employeeId}}" data-type="remove-user" class="center aligned"><i class="trash red large icon" title="delete"></i></a>
+                    <!a href="javascript:void(0);" id="pop" class="visible content button button-add">
+                        <!i class="write blue large icon" title="edit"><!/i>
+                    <!/a>
+                    <div class="ui flowing popup top left transition hidden">
+                        <div class="ui buttons">
+                            <form class="ui form">
+                                <div class="field">
+                                    <label>New Employee Name<br/>
+                                        <input type="text" name="EmployeeName"
+                                               style="width:200px;">
+                                    </label>
+                                    <label>phoneNumber<br/>
+                                        <input type="text" name="number"
+                                               style="width:200px;">
+                                    </label>
+                                    <label>Address<br/>
+                                        <input type="text" name="Address"
+                                               style="width:200px;">
+                                    </label>
+                                    <label>Team<br/>
+                                        <input type="text" name="team"
+                                               style="width:200px;">
+                                    </label>
+
+                                </div>
+                                <input id="updateGroup" name="{{name}}" employeeId="{{employeeId}}" phoneNumber="{{phoneNumber}}" address="{{address}}" team="{{team}}" data-type="update-users" class="ui primary button" type="button" value="Update Details">
+                            </form>
+                            <span class="message"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {{/each}}
+    </table>
+
+</script>
+
+<script id="notification-popup" type="text/x-handlebars-template">
+    <div>
+        <div class="ui celled list">
+            {{#each newNotifications}}
+                <div class="item">
+                    {{#is eventCategory "DRIVER_EVENT"}}
+                        <span>You Acknowledged </span><br/>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{else}}
+                        <span>{{ackowledger}} Acknowledged </span><br>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{/is}}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" id="statistics-template">
+</script>

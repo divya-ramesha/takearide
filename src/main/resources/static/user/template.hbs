@@ -1,0 +1,774 @@
+<style type="text/css" id="user-css">
+    @import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
+
+    .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+    }
+
+    .clearfix {
+        display: inline-block;
+    }
+
+    html[xmlns] .clearfix {
+        display: block;
+    }
+
+    * html .clearfix {
+        height: 1%;
+    }
+
+    .noselect {
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    h4 {
+        width: 75%;
+        text-align: center;
+        font-family: Inconsolata, Monaco, 'Andale Mono', Courier;
+        font-weight: 700;
+        color: white;
+        font-size: 14px;
+        margin: 0 auto 1em auto;
+        padding: 1em;
+        background: #b63642;
+    }
+
+    h5 {
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    p {
+        text-align: center;
+        font-family: Inconsolata, Monaco, 'Andale Mono', Courier;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        border-bottom: 2px solid #414141;
+        background: #f4f4f4;
+    }
+
+    .left-align {
+        text-align: left;
+    }
+
+    .right-align {
+        text-align: right;
+    }
+
+    .cal1 {
+        margin: 30px auto;
+        max-width: 600px;
+        font-family: Inconsolata, Monaco, 'Andale Mono', Courier;
+        font-weight: 700;
+    }
+
+    .cal1 .clndr .clndr-controls {
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+    .cal1 .clndr .clndr-controls .month {
+        float: left;
+        width: 33%;
+        text-align: center;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button {
+        float: left;
+        width: 33%;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button.rightalign {
+        text-align: right;
+        width: 34%;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-next-button {
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-next-button:hover {
+        background: #ddd;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-next-button.inactive {
+        opacity: 0.5;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-next-button.inactive:hover {
+        background: none;
+        cursor: default;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-previous-button {
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-previous-button:hover {
+        background: #ddd;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-previous-button.inactive {
+        opacity: 0.5;
+    }
+
+    .cal1 .clndr .clndr-controls .clndr-control-button .clndr-previous-button.inactive:hover {
+        background: none;
+        cursor: default;
+    }
+
+    .cal1 .clndr .clndr-table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .cal1 .clndr .clndr-table .header-days {
+        height: 30px;
+        font-size: 13px;
+        font-family: sans-serif;
+        background: #0D70A6;
+    }
+
+    .cal1 .clndr .clndr-table .header-days .header-day {
+        vertical-align: middle;
+        text-align: center;
+        border-left: 1px solid #000000;
+        border-top: 1px solid #000000;
+        color: #fff;
+    }
+
+    .cal1 .clndr .clndr-table .header-days .header-day:last-child {
+        border-right: 1px solid #000000;
+    }
+
+    .cal1 .clndr .clndr-table tr {
+        height: 85px;
+    }
+
+    .cal1 .clndr .clndr-table tr td {
+        vertical-align: top;
+    }
+
+    .cal1 .clndr .clndr-table tr .day {
+        border-left: 1px solid #000000;
+        border-top: 1px solid #000000;
+        width: 100%;
+        height: inherit;
+    }
+
+    .cal1 .clndr .clndr-table tr .day:hover {
+        background: #eee;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.today,
+    .cal1 .clndr .clndr-table tr .day.my-today {
+        background: #9AD6E3;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.today:hover,
+    .cal1 .clndr .clndr-table tr .day.my-today:hover {
+        background: #72c6d8;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.today.event,
+    .cal1 .clndr .clndr-table tr .day.my-today.event {
+        background: #a7dbc1;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.event,
+    .cal1 .clndr .clndr-table tr .day.my-event {
+        background: #B4E09F;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.event:hover,
+    .cal1 .clndr .clndr-table tr .day.my-event:hover {
+        background: #96d478;
+    }
+
+    .cal1 .clndr .clndr-table tr .day.inactive,
+    .cal1 .clndr .clndr-table tr .day.my-inactive {
+        background: #ddd;
+    }
+
+    .cal1 .clndr .clndr-table tr .day:last-child {
+        border-right: 1px solid #000000;
+    }
+
+    .cal1 .clndr .clndr-table tr .day .day-contents {
+        box-sizing: border-box;
+        padding: 8px;
+        font-size: 12px;
+        text-align: right;
+    }
+
+    .cal1 .clndr .clndr-table tr .empty,
+    .cal1 .clndr .clndr-table tr .adjacent-month,
+    .cal1 .clndr .clndr-table tr .my-empty,
+    .cal1 .clndr .clndr-table tr .my-adjacent-month {
+        border-left: 1px solid #000000;
+        border-top: 1px solid #000000;
+        width: 100%;
+        height: inherit;
+        background: #eee;
+    }
+
+    .cal1 .clndr .clndr-table tr .empty:hover,
+    .cal1 .clndr .clndr-table tr .adjacent-month:hover,
+    .cal1 .clndr .clndr-table tr .my-empty:hover,
+    .cal1 .clndr .clndr-table tr .my-adjacent-month:hover {
+        background: #ddd;
+    }
+
+    .cal1 .clndr .clndr-table tr .empty:last-child,
+    .cal1 .clndr .clndr-table tr .adjacent-month:last-child,
+    .cal1 .clndr .clndr-table tr .my-empty:last-child,
+    .cal1 .clndr .clndr-table tr .my-adjacent-month:last-child {
+        border-right: 1px solid #000000;
+    }
+
+    .cal1 .clndr .clndr-table tr:last-child .day,
+    .cal1 .clndr .clndr-table tr:last-child .my-day {
+        border-bottom: 1px solid #000000;
+    }
+
+    .cal1 .clndr .clndr-table tr:last-child .empty,
+    .cal1 .clndr .clndr-table tr:last-child .my-empty {
+        border-bottom: 1px solid #000000;
+    }
+
+    .cal2 {
+        max-width: 177px;
+        margin: 30px auto;
+        font-family: 'Droid Sans Mono';
+    }
+
+    .cal2 .clndr .clndr-controls {
+        display: block;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 3px;
+    }
+
+    .cal2 .clndr .clndr-controls .clndr-previous-button {
+        float: left;
+        width: 10%;
+        text-align: left;
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal2 .clndr .clndr-controls .clndr-previous-button:hover {
+        background-color: #f4f4f4;
+    }
+
+    .cal2 .clndr .clndr-controls .month {
+        float: left;
+        width: 80%;
+        text-align: center;
+    }
+
+    .cal2 .clndr .clndr-controls .clndr-next-button {
+        float: left;
+        width: 10%;
+        text-align: right;
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal2 .clndr .clndr-controls .clndr-next-button:hover {
+        background-color: #f4f4f4;
+    }
+
+    .cal2 .clndr .clndr-grid {
+        text-align: center;
+        border: 1px solid #FF4545;
+        display: inline-block;
+    }
+
+    .cal2 .clndr .clndr-grid .header-day {
+        float: left;
+        width: 25px;
+        height: 25px;
+        background: #FF4545;
+    }
+
+    .cal2 .clndr .clndr-grid .day {
+        float: left;
+        width: 25px;
+        height: 25px;
+    }
+
+    .cal2 .clndr .clndr-grid .day.event {
+        background-color: #B4E09F;
+    }
+
+    .cal2 .clndr .clndr-grid .day.today {
+        background-color: #E3C57F;
+    }
+
+    .cal2 .clndr .clndr-grid .day.selected {
+        background-color: #E37FD6;
+    }
+
+    .cal2 .clndr .clndr-grid .day.inactive {
+        color: gray;
+    }
+
+    .cal2 .clndr .clndr-grid .empty,
+    .cal2 .clndr .clndr-grid .adjacent-month {
+        float: left;
+        width: 25px;
+        height: 25px;
+        background: #ddd;
+    }
+
+    .cal2 .clndr .clndr-today-button {
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .cal2 .clndr .clndr-today-button:hover {
+        background-color: #ddd;
+    }
+
+    .cal2 .multi-month-controls .quarter-button {
+        display: inline-block;
+        width: 25%;
+    }
+
+    .cal2 .multi-month-controls .quarter-button:hover {
+        cursor: pointer;
+        background-color: #f4f4f4;
+    }
+
+    .cal2 .day.inactive {
+        background-color: #aaa;
+    }
+
+    .cal3 {
+        max-width: 354px;
+        margin: 0 auto;
+        font-family: 'Droid Sans Mono';
+    }
+
+    .cal3 .cal {
+        float: left;
+        width: 177px;
+    }
+
+    .cal3 .clndr .clndr-controls {
+        display: block;
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .cal3 .clndr .clndr-controls.top {
+        margin-bottom: -22px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cal3 .clndr .clndr-controls .clndr-previous-button {
+        float: left;
+        width: 10%;
+        text-align: left;
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal3 .clndr .clndr-controls .clndr-previous-button:hover {
+        background-color: #f4f4f4;
+    }
+
+    .cal3 .clndr .clndr-controls .month {
+        text-align: center;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .cal3 .clndr .clndr-controls .clndr-next-button {
+        float: right;
+        width: 10%;
+        text-align: right;
+        cursor: pointer;
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .cal3 .clndr .clndr-controls .clndr-next-button:hover {
+        background-color: #f4f4f4;
+    }
+
+    .cal3 .clndr .clndr-grid {
+        text-align: center;
+        border: 1px solid #FF4545;
+        display: inline-block;
+    }
+
+    .cal3 .clndr .clndr-grid .header-day {
+        float: left;
+        width: 25px;
+        height: 25px;
+        background: #FF4545;
+    }
+
+    .cal3 .clndr .clndr-grid .day {
+        float: left;
+        width: 25px;
+        height: 25px;
+    }
+
+    .cal3 .clndr .clndr-grid .day.event {
+        background-color: #B4E09F;
+    }
+
+    .cal3 .clndr .clndr-grid .day.today {
+        background-color: #E3C57F;
+    }
+
+    .cal3 .clndr .clndr-grid .empty,
+    .cal3 .clndr .clndr-grid .adjacent-month {
+        float: left;
+        width: 25px;
+        height: 25px;
+        background: #ddd;
+    }
+
+    .cal3 .clndr .clndr-today-button {
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .cal3 .clndr .clndr-today-button:hover {
+        background-color: #ddd;
+    }
+
+    .cal3 .multi-month-controls .quarter-button {
+        display: inline-block;
+        width: 25%;
+    }
+
+    .cal3 .multi-month-controls .quarter-button:hover {
+        cursor: pointer;
+        background-color: #f4f4f4;
+    }
+
+    .clndr-next-button,
+    .clndr-previous-button,
+    .clndr-next-year-button,
+    .clndr-previous-year-button {
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+    }
+
+    .clndr-next-button.inactive,
+    .clndr-previous-button.inactive,
+    .clndr-next-year-button.inactive,
+    .clndr-previous-year-button.inactive {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    .content {
+        margin-left: 30px;
+    }
+
+    i {
+        margin-left: -30px;
+    }
+
+    #calender1 {
+        margin-left: 350px;
+    }
+
+    form {
+        display: none;
+    }
+
+    .content {
+        color: white;
+    }
+
+    .vticker {
+        width: 400px;
+    }
+
+    .vticker ul {
+        padding: 0;
+    }
+
+    .vticker li {
+        list-style: none;
+        border-bottom: 1px solid black;
+        padding: 10px;
+    }
+
+</style>
+
+<script type="text/x-handlebars-template" id="user-main">
+    <div class="ui top attached demo menu" style="height:50px;">
+        <a class="item menu-item" style="width:150px;">
+            <i class="sidebar icon"></i>
+            Menu
+        </a>
+        <div class="right menu">
+            <a class="ui item refresh" data-type="refresh-data">
+                <i class="refresh icon"></i>
+            </a>
+            <a class="ui item notification" data-type="notification">
+                <i class="alarm icon"></i>
+            </a>
+            <div class="ui right dropdown item" style="margin-right:15px !important;">
+                Divya
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item profile" data-type="get-profile">Profile</a>
+                    <a class="item settings" data-type="get-user-settings">Settings</a>
+                    <a class="item logout" href="/">LogOut</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached segment pushable" style="height:1000px;">
+        <div class="ui inverted labeled icon left inline vertical sidebar menu" style="text-align:left;width:230px;">
+            <a class="item menu-item" data-type="user-home">
+                <i class="user icon"></i>
+                Home
+            </a>
+            <a class="item menu-item" data-type="user-notifications">
+                <i class="hourglass start icon"></i>
+                Pending Rescheduled Requests
+            </a>
+            <a class="item menu-item" id="start-ride" data-type="user-start" style="opacity:0.6;pointer-events:none;">
+                <i class="car icon"></i>
+                Start My Ride
+            </a>
+            <a class="item menu-item" id="end-ride" data-type="user-end" style="opacity:0.6;pointer-events:none;">
+                <i class="home icon"></i>
+                End My Ride
+            </a>
+            <div class="ui basic segment">
+                <form class="ui form" data-type="reschedule">
+                    <div class="ui accordion" menu-item>
+                        <div class="title">
+                            <a class="item">
+                                <i class="edit icon"></i>
+                                Reschedule A Ride
+                            </a>
+                        </div>
+                        <div class="content ">
+                            <select name="pickup" class="ui dropdown" id="pickup">
+                                <option value="PICKUP">PickUp</option>
+                                <option value="8 AM">08:00 AM</option>
+                                <option value="9:30 AM">09:30 AM</option>
+                                <option value="11 AM">11:00 AM</option>
+                                <option value="3 PM">03:00 PM</option>
+                            </select>
+                            <br/><br/>
+                            <select name="drop" class="ui dropdown" id="drop">
+                                <option value="DROP">Drop</option>
+                                <option value="5 PM">05:00 PM</option>
+                                <option value="6:30 PM">06:30 PM</option>
+                                <option value="8 PM">08:00 PM</option>
+                                <option value="10 PM">10:00 PM</option>
+                            </select>
+                            <br/><br/>
+                            <button class="ui positive right labeled icon button" data-type="reschedule-submit"
+                                    type="button">Done
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ui basic segment">
+                <form class="ui form" data-type="reschedule">
+                    <div class="ui accordion" menu-item>
+                        <div class="title">
+                            <a class="item">
+                                <i class="edit icon"></i>
+                                Cancel A Ride
+                            </a>
+                        </div>
+
+                        <div class="content">
+                            <div class="ui checkbox">
+                                <input type="checkbox" tabindex="0" class="ui checkbox" id="cancel_pickup">
+                                <label style="color:white;">Cancel Pick Up</label>
+                            </div>
+                            <br/> <br/>
+                            <div class="ui checkbox">
+                                <input type="checkbox" tabindex="0" class="ui checkbox" id="cancel_drop">
+                                <label style="color:white;">Cancel Drop</label>
+                            </div>
+                            <br/> <br/>
+                            <button class="ui positive right labeled icon button" data-type="cancel-ride-submit"
+                                    type="submit">Done
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="pusher">
+            <div class="ui basic segment">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eleven wide column" style="margin-left:10px; margin-top:50px;">
+
+                            <div id="create-group">
+                                <div class="ui basic segment right-div cal1" id="calender1"></div>
+                                <div class="ui basic segment right-div " style="display:none;"
+                                     id="notifications-container"></div>
+                            </div>
+                        </div>
+                        <div id="events-div" class="right floated column events-div"
+                             style="height:1500px;margin-right:250px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script id="pending-notification" type="text/x-handlebars-template">
+    <div class="pending-requests-table"
+         style="margin-bottom:30px;margin-top:50px;font-family: Inconsolata, Monaco, 'Andale Mono', Courier;">
+        <table class="ui single line small table striped" id="driver-current-rides-tbl" cellspacing="0"
+               width="100%">
+            <thead>
+            <tr>
+                <th class='center aligned field'>Date</th>
+                <th class='center aligned field'>Ride Type</th>
+                <th class='center aligned field'>Current Schedule</th>
+                <th class='center aligned field'>Requested Schedule</th>
+                <th class='center aligned field'>Status</th>
+                <th class='center aligned last'></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each this}}
+                <tr class="tr-body">
+                    <td class='center aligned td-body field'
+                        title="{{date}}">{{date}}</td>
+                    <td class='center aligned td-body field'
+                        title="{{rideType}}">{{rideType}}</td>
+                    <td class='center aligned td-body field'
+                        title="{{oldBatch}} ">{{oldBatch}}</td>
+                    <td class='center aligned td-body field'
+                        title="{{newBatch}} ">{{newBatch}}</td>
+                    {{#if acknowledged}}
+                        <td class='center aligned td-body field'
+                            title="Acknowledged">Acknowledged
+                        </td>
+                    {{else}}
+                        <td class='center aligned td-body field'
+                            title="Pending">Pending
+                        </td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    </div>
+</script>
+
+<script id="notification-popup" type="text/x-handlebars-template">
+    <div>
+        <div class="ui celled list">
+            {{#each newNotifications}}
+                <div class="item">
+                    {{#is eventCategory "DRIVER_EVENT"}}
+                        <span>You Acknowledged </span><br/>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{else}}
+                        <span>{{ackowledger}} Acknowledged </span><br>
+                        <span>{{eventType}}</span><br/>
+                        <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                    {{/is}}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</script>
+
+<script id="notification-number-script" type="text/x-handlebars-template">
+    {{#if newNotificationsLength}}
+        <i class="large icons">
+            <i class="blue alarm icon"></i>
+            <div class="floating ui red circular mini label">{{newNotificationsLength}}</div>
+        </i>
+    {{else}}
+        <i class="blue alarm large icon popup-icon" data-content="No New Notification" data-variation="tiny"
+           data-position="bottom right"></i>
+    {{/if}}
+</script>
+
+<script id="event-notification-script-id" type="text/x-handlebars-template">
+    <div class="vticker">
+        <ul>
+            {{#each notifications}}
+                <li title="{{date}}">
+                    <span>{{ackowledger}} Acknowledged </span><br>
+                    <span>{{eventType}}</span><br/>
+                    <span>{{dateFormatTimeAgo timestamp}} for Ride ID: {{rideId}}</span>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
